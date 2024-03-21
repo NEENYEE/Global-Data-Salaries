@@ -142,4 +142,133 @@ BI Data Engineer, Deep Learning Researcher, Big Data Architect, Computer Vision 
 Manager Data Management, Data Science Tech Lead, Data Scientist Lead, Marketing Data Analyst, Principal Data Architect, 
 Data Analytics Engineer, Cloud Data Architect, Lead Data Engineer, and Principal Data Analyst.
 
+| job_title               | job_count |
+|-------------------------|-----------|
+| Data Engineer           | 1852      |
+| Data Scientist          | 1711      |
+| Data Analyst            | 1266      |
+| Machine Learning Engineer | 966      |
+| Data Scientist          | 792       |
+| Data Engineer           | 725       |
+| Data Analyst            | 587       |
+| Data Engineer           | 488       |
+| Machine Learning Engineer | 412      |
+| Data Scientist          | 404       |
+
+
+
+| work_year | job_title                 | job_count |
+|-----------|---------------------------|-----------|
+| 2020      | Data Scientist            | 21        |
+| 2020      | Data Engineer             | 13        |
+| 2020      | Data Analyst              | 6         |
+| 2020      | Machine Learning Engineer| 4         |
+| 2020      | Business Data Analyst    | 3         |
+| 2020      | Big Data Engineer         | 3         |
+| 2020      | Staff Data Analyst        | 2         |
+| 2020      | Research Scientist        | 2         |
+| 2020      | Lead Data Scientist       | 2         |
+| 2020      | Lead Data Engineer        | 2         |
+| 2021      | Data Scientist            | 40        |
+| 2021      | Data Engineer             | 37        |
+| 2021      | Data Analyst              | 20        |
+| 2021      | Machine Learning Engineer| 18        |
+| 2021      | Research Scientist        | 10        |
+| 2021      | Data Science Manager      | 6         |
+| 2021      | Principal Data Scientist  | 5         |
+| 2021      | Director of Data Science  | 5         |
+| 2021      | Data Science Consultant   | 5         |
+| 2021      | ML Engineer               | 4         |
+| 2022      | Data Engineer             | 488       |
+| 2022      | Data Scientist            | 404       |
+| 2022      | Data Analyst              | 272       |
+| 2022      | Machine Learning Engineer| 108       |
+| 2022      | Analytics Engineer        | 56        |
+| 2022      | Data Architect            | 46        |
+| 2022      | Data Science Manager      | 30        |
+| 2022      | Applied Scientist         | 18        |
+| 2022      | Research Scientist        | 15        |
+| 2022      | ML Engineer               | 15        |
+| 2023      | Data Engineer             | 1852      |
+| 2023      | Data Scientist            | 1711      |
+| 2023      | Data Analyst              | 1266      |
+| 2023      | Machine Learning Engineer| 966       |
+| 2023      | Research Scientist        | 286       |
+| 2023      | Applied Scientist         | 280       |
+| 2023      | Analytics Engineer        | 222       |
+| 2023      | Data Architect            | 200       |
+| 2023      | Research Engineer         | 164       |
+| 2023      | Business Intelligence Engineer| 164   |
+| 2024      | Data Scientist            | 792       |
+| 2024      | Data Engineer             | 725       |
+| 2024      | Data Analyst              | 587       |
+| 2024      | Machine Learning Engineer| 412       |
+| 2024      | Research Scientist        | 154       |
+| 2024      | Data Science              | 153       |
+| 2024      | Analytics Engineer
+
+
+
+
+### Year 2020                                                
+
+| Job Title                 | Job Count |
+|---------------------------|-----------|
+| Data Scientist            | 21        |
+| Data Engineer             | 13        |
+| Data Analyst              | 6         |
+| Machine Learning Engineer| 4         |
+| Business Data Analyst    | 3         |
+| Big Data Engineer         | 3         |
+| Staff Data Analyst        | 2         |
+| Research Scientist        | 2         |
+| Lead Data Scientist       | 2         |
+| Lead Data Engineer        | 2         |
+
+
+
+### Year 2022
+
+| Job Title                 | Job Count |
+|---------------------------|-----------|
+| Data Engineer             | 488       |
+| Data Scientist            | 404       |
+| Data Analyst              | 272       |
+| Machine Learning Engineer| 108       |
+| Analytics Engineer        | 56        |
+| Data Architect            | 46        |
+| Data Science Manager      | 30        |
+| Applied Scientist         | 18        |
+| Research Scientist        | 15        |
+| ML Engineer               | 15        |
+
+### Year 2023
+
+| Job Title                 | Job Count |
+|---------------------------|-----------|
+| Data Engineer             | 1852      |
+| Data Scientist            | 1711      |
+| Data Analyst              | 1266      |
+| Machine Learning Engineer| 966       |
+| Research Scientist        | 286       |
+| Applied Scientist         | 280       |
+| Analytics Engineer        | 222       |
+| Data Architect            | 200       |
+| Research Engineer         | 164       |
+| Business Intelligence Engineer| 164   |
+
+### Year 2024
+
+| Job Title                 | Job Count |
+|---------------------------|-----------|
+| Data Scientist            | 792       |
+| Data Engineer             | 725       |
+| Data Analyst              | 587       |
+| Machine Learning Engineer| 412       |
+| Research Scientist        | 154       |
+| Data Science              | 153       |
+| Analytics Engineer        | 119       |
+| Data Architect            | 106       |
+| Research Engineer         | 100       |
+| Applied Scientist         | 75        |
 
