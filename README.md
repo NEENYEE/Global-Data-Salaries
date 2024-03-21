@@ -318,6 +318,22 @@ FROM salaries
 GROUP BY job_title, company_size
 ORDER BY job_title ASC;
 ```
+**Company Size Impact:** Across all roles, employees in large companies tend to earn higher salaries compared to those in smaller companies. This trend suggests that larger companies may have more resources and financial capacity to offer competitive compensation packages to their employees.
+
+**Experience Level Impact:** Directors consistently earn higher salaries across different roles compared to other experience levels. This finding highlights the value placed on experience and seniority within organizations, where individuals in leadership positions command higher compensation due to their expertise and responsibilities.
+
+**Employment Type Impact:** Full-time employees tend to earn higher salaries compared to those in other employment types. This observation underscores the traditional employment model where full-time positions often come with additional benefits and stability, leading to higher overall compensation for employees.
+
+**6. Distribution of average salaries by country**
+
+```sql
+SELECT ROUND(AVG(s.salary_in_usd),0) AS avg_salary, c.country
+FROM salaries s
+INNER JOIN countries c
+ON s.company_location = c.code
+GROUP BY c.country
+ORDER BY avg_salary DESC;
+```
 
 
 
