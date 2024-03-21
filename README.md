@@ -47,6 +47,9 @@ The remote_ratio column in the salaries table was renamed to remote_status, and 
 **5. Updating Remote Status:**
 The remote_status column in the salaries table was updated based on the remote_ratio values. The numeric values representing remote work ratios were replaced with descriptive categories ('fully remote', 'hybrid', 'on-site').
 
+**6. Update job titles in the 'salaries' table based on specific conditions:**
+Updated job titles in the 'salaries' table, mapping various job titles to standardized ones for consistency.
+
 
 ```sql
 -- Removing unnecessary columns from the 'salaries' table
@@ -65,7 +68,7 @@ SET
         WHEN experience_level = 'EX' THEN 'Executive'
     END;
     
--- Update the 'employment_type' column in the 'salaries' table to expand abbreviated employment types
+-- Updating the 'employment_type' column in the 'salaries' table to expand abbreviated employment types
 
 UPDATE salaries 
 SET 
@@ -92,6 +95,20 @@ SET
         WHEN remote_status = 50 THEN 'hybrid'
         WHEN remote_status = 0 THEN 'on-site'
     END;
+
+-- Update job titles in the 'salaries' table based on specific conditions
+UPDATE salaries
+SET job_title =
+    CASE
+        WHEN job_title IN ('Data science', 'Data science practitioner', 'Staff data scientist') THEN 'Data Scientist'
+        WHEN job_title IN ('BI Analyst', 'BI Data Analyst', 'Business Intelligence Data Analyst') THEN 'Business Intelligence Analyst'
+        WHEN job_title IN ('Data scientist Lead','Data Science Tech Lead', 'Head of data', 'Data manager', 'head of data science') THEN 'Data science manager'
+        WHEN job_title IN ('ML engineer', 'Machine learning research engineer', 'Data science engineer')  THEN 'Machine learning engineer' 
+        WHEN job_title IN ('Data Lead', 'Data analytics manager', 'Principal data analyst') THEN 'Data Analyst Lead'
+        WHEN job_title IN ('Staff data analyst', 'Data science analyst', 'Admin & data analyst') THEN 'Data analyst' 
+        ELSE job_title
+    END;
+
     
 ```
 
@@ -99,133 +116,94 @@ SET
 
 Following the completion of the data cleaning process, a comprehensive exploration of the dataset was conducted to gain insights and understand key trends. Here's an overview of the data exploration journey:
 
-1. How many job titles are we looking at?
+**1. How many job titles are we looking at?**
 ```sql
 SELECT COUNT(DISTINCT(job_title))
 FROM salaries;
 ```
-There are **150** distinct job titles.
+There are **129** distinct job titles.
 
-2. what are these job titles?
+**2. what are these job titles?**
 ```sql
    SELECT DISTINCT(job_title)
 FROM salaries;
 ```
-The dataset includes a diverse range of job titles, including Data Science, Data Engineer, Data Analyst, ETL Developer, 
-Data Analytics Manager, Data Scientist, Data Specialist, AI Architect, AI Engineer, Data Architect, Data Integration Specialist, 
-Robotics Engineer, Research Analyst, Applied Scientist, BI Developer, Business Intelligence Analyst, Machine Learning Engineer, 
-Research Scientist, Head of Data, Data Science Manager, Data Modeler, Business Intelligence Engineer, Cloud Database Engineer, 
-Machine Learning Scientist, Data Operations Analyst, Data Developer, Research Engineer, Data Science Analyst, Data Science Practitioner, 
-Data Management Analyst, Analytics Engineer, Data Science Consultant, BI Data Analyst, Applied Data Scientist, Business Intelligence, 
-Insight Analyst, Data Quality Engineer, BI Analyst, Data Manager, Computational Biologist, AI Research Scientist, MLOps Engineer, 
-Big Data Engineer, Business Intelligence Manager, Prompt Engineer, Data Integration Engineer, Data Analytics Associate, 
-Data Reporting Analyst, Business Intelligence Developer, Data Management Consultant, Data Quality Analyst, ML Engineer, 
-Robotics Software Engineer, Machine Learning Researcher, Data DevOps Engineer, AI Software Engineer, Data Operations Specialist, 
-Data Product Manager, Data Science Director, Data Strategist, Big Data Developer, Quantitative Research Analyst,
-Lead Machine Learning Engineer, Machine Learning Research Engineer, Data Infrastructure Engineer, Data Analytics Lead, 
-Data Analytics Consultant, AI Research Engineer, Data Analytics Specialist, Data Science Engineer, Business Intelligence Lead, 
-AI Programmer, ETL Engineer, AI Product Manager, Data Management Specialist, Data Operations Associate, AI Developer,
-Admin & Data Analyst, AI Scientist, Computer Vision Engineer, Head of Machine Learning, Data Analyst Lead, 
-Machine Learning Operations Engineer, Data Lead, Data Integration Developer, ML Ops Engineer, Data Pipeline Engineer, 
-Lead Data Analyst, Data Science Lead, Director of Data Science, Managing Director Data Science, Data Visualization Specialist, 
-Data Quality Manager, Data Product Owner, Machine Learning Infrastructure Engineer, Business Data Analyst, NLP Engineer, 
-Marketing Data Scientist, Deep Learning Engineer, Machine Learning Modeler, Business Intelligence Specialist, Decision Scientist, 
-Financial Data Analyst, Data Strategy Manager, Data Visualization Engineer, Azure Data Engineer, Principal Data Scientist, 
-Staff Data Analyst, Machine Learning Software Engineer, Applied Machine Learning Scientist, Data Operations Engineer, 
-Machine Learning Manager, Lead Data Scientist, Principal Machine Learning Engineer, Principal Data Engineer, 
-Power BI Developer, Head of Data Science, Staff Machine Learning Engineer, Staff Data Scientist, 
-Consultant Data Engineer, Machine Learning Specialist, Business Intelligence Data Analyst, Data Operations Manager,
-Data Modeller, Finance Data Analyst, Software Data Engineer, Compliance Data Analyst, Cloud Data Engineer, 
-Analytics Engineering Manager, AWS Data Architect, Product Data Analyst, Machine Learning Developer, 
-Data Visualization Analyst, Autonomous Vehicle Technician, Sales Data Analyst, Applied Machine Learning Engineer, 
-BI Data Engineer, Deep Learning Researcher, Big Data Architect, Computer Vision Software Engineer, Marketing Data Engineer, 
-Manager Data Management, Data Science Tech Lead, Data Scientist Lead, Marketing Data Analyst, Principal Data Architect, 
-Data Analytics Engineer, Cloud Data Architect, Lead Data Engineer, and Principal Data Analyst.
+The dataset includes a diverse range of job titles. They include:
 
-| job_title               | job_count |
+Data Scientist, Data Engineer, Data Analyst, ETL Developer, Data Analyst Lead, Data Specialist, AI Architect, AI Engineer, Data Architect, Data Integration Specialist, Robotics Engineer, Research Analyst, Applied Scientist, BI Developer, Business Intelligence Analyst, Machine Learning Engineer, Research Scientist, Data science manager, Data Modeler, Business Intelligence Engineer, Cloud Database Engineer, Machine Learning Scientist, Data Operations Analyst, Data Developer, Research Engineer, Data Management Analyst, Analytics Engineer, Data Science Consultant, Applied Data Scientist, Business Intelligence, Insight Analyst, Data Quality Engineer, Computational Biologist, AI Research Scientist, MLOps Engineer, Big Data Engineer, Business Intelligence Manager, Prompt Engineer, Data Integration Engineer, Data Analytics Associate, Data Reporting Analyst, Business Intelligence Developer, Data Management Consultant, Data Quality Analyst, Robotics Software Engineer, Machine Learning Researcher, Data DevOps Engineer, AI Software Engineer, Data Operations Specialist, Data Product Manager, Data Science Director, Data Strategist, Big Data Developer, Quantitative Research Analyst, Lead Machine Learning Engineer, Data Infrastructure Engineer, Data Analytics Lead, Data Analytics Consultant, AI Research Engineer, Data Analytics Specialist, Business Intelligence Lead, AI Programmer, ETL Engineer, AI Product Manager, Data Management Specialist, Data Operations Associate, AI Developer, AI Scientist, Computer Vision Engineer, Head of Machine Learning, Machine Learning Operations Engineer, Data Integration Developer, ML Ops Engineer, Data Pipeline Engineer, Lead Data Analyst, Director of Data Science, Managing Director Data Science, Data Visualization Specialist, Data Quality Manager, Data Product Owner, Machine Learning Infrastructure Engineer, Business Data Analyst, NLP Engineer, Marketing Data Scientist, Deep Learning Engineer, Machine Learning Modeler, Business Intelligence Specialist, Decision Scientist, Financial Data Analyst, Data Strategy Manager, Data Visualization Engineer, Azure Data Engineer, Principal Data Scientist, Machine Learning Software Engineer, Applied Machine Learning Scientist, Data Operations Engineer, Machine Learning Manager, Lead Data Scientist, Principal Machine Learning Engineer, Principal Data Engineer, Power BI Developer, Staff Machine Learning Engineer, Consultant Data Engineer, Machine Learning Specialist, Data Operations Manager, Data Modeller, Finance Data Analyst, Software Data Engineer, Compliance Data Analyst, Cloud Data Engineer, Analytics Engineering Manager, AWS Data Architect, Product Data Analyst, Machine Learning Developer, Data Visualization Analyst, Autonomous Vehicle Technician, Sales Data Analyst, Applied Machine Learning Engineer, BI Data Engineer, Deep Learning Researcher, Big Data Architect, Computer Vision Software Engineer, Marketing Data Engineer, Manager Data Management, Marketing Data Analyst, Principal Data Architect, Data Analytics Engineer, Cloud Data Architect, Lead Data Engineer
+
+**3. What are the 10 most popular roles in this field?**
+
+```sql
+SELECT job_title, COUNT(job_title) AS job_count
+FROM salaries
+GROUP BY job_title, work_year
+ORDER BY job_count DESC
+LIMIT 10;
+
+```
+**Output:**
+| Job Title               | Job Count |
 |-------------------------|-----------|
-| Data Engineer           | 1852      |
-| Data Scientist          | 1711      |
-| Data Analyst            | 1266      |
-| Machine Learning Engineer | 966      |
-| Data Scientist          | 792       |
-| Data Engineer           | 725       |
-| Data Analyst            | 587       |
-| Data Engineer           | 488       |
-| Machine Learning Engineer | 412      |
-| Data Scientist          | 404       |
+| Data Scientist          | 3177      |
+| Data Engineer           | 3115      |
+| Data Analyst            | 2161      |
+| Machine Learning Engineer | 1692    |
+| Research Scientist      | 467       |
+| Analytics Engineer      | 397       |
+| Data science manager   | 386       |
+| Applied Scientist       | 373       |
+| Data Architect          | 355       |
+| Research Engineer       | 272       |
 
+The above table shows the 10 most popular entries among the survey responses. These findings provide valuable insights into the prevalent job roles within the data field and highlight areas of significant interest among survey participants. However, it's important to note that the popularity of these job titles may not directly correlate with the actual employment numbers or workforce distribution. Further investigation is necessary to understand the underlying factors driving the prominence of these roles.
 
+**4. Has these job titles reamained popular over the years?**
 
-| work_year | job_title                 | job_count |
-|-----------|---------------------------|-----------|
-| 2020      | Data Scientist            | 21        |
-| 2020      | Data Engineer             | 13        |
-| 2020      | Data Analyst              | 6         |
-| 2020      | Machine Learning Engineer| 4         |
-| 2020      | Business Data Analyst    | 3         |
-| 2020      | Big Data Engineer         | 3         |
-| 2020      | Staff Data Analyst        | 2         |
-| 2020      | Research Scientist        | 2         |
-| 2020      | Lead Data Scientist       | 2         |
-| 2020      | Lead Data Engineer        | 2         |
-| 2021      | Data Scientist            | 40        |
-| 2021      | Data Engineer             | 37        |
-| 2021      | Data Analyst              | 20        |
-| 2021      | Machine Learning Engineer| 18        |
-| 2021      | Research Scientist        | 10        |
-| 2021      | Data Science Manager      | 6         |
-| 2021      | Principal Data Scientist  | 5         |
-| 2021      | Director of Data Science  | 5         |
-| 2021      | Data Science Consultant   | 5         |
-| 2021      | ML Engineer               | 4         |
-| 2022      | Data Engineer             | 488       |
-| 2022      | Data Scientist            | 404       |
-| 2022      | Data Analyst              | 272       |
-| 2022      | Machine Learning Engineer| 108       |
-| 2022      | Analytics Engineer        | 56        |
-| 2022      | Data Architect            | 46        |
-| 2022      | Data Science Manager      | 30        |
-| 2022      | Applied Scientist         | 18        |
-| 2022      | Research Scientist        | 15        |
-| 2022      | ML Engineer               | 15        |
-| 2023      | Data Engineer             | 1852      |
-| 2023      | Data Scientist            | 1711      |
-| 2023      | Data Analyst              | 1266      |
-| 2023      | Machine Learning Engineer| 966       |
-| 2023      | Research Scientist        | 286       |
-| 2023      | Applied Scientist         | 280       |
-| 2023      | Analytics Engineer        | 222       |
-| 2023      | Data Architect            | 200       |
-| 2023      | Research Engineer         | 164       |
-| 2023      | Business Intelligence Engineer| 164   |
-| 2024      | Data Scientist            | 792       |
-| 2024      | Data Engineer             | 725       |
-| 2024      | Data Analyst              | 587       |
-| 2024      | Machine Learning Engineer| 412       |
-| 2024      | Research Scientist        | 154       |
-| 2024      | Data Science              | 153       |
-| 2024      | Analytics Engineer
+```sql
+SELECT work_year, job_title, job_count
+FROM (
+    SELECT 
+        work_year,
+        job_title,
+        COUNT(job_title) AS job_count,
+        ROW_NUMBER() OVER (PARTITION BY work_year ORDER BY COUNT(job_title) DESC) AS ranks
+    FROM salaries
+    GROUP BY work_year, job_title
+) AS RankedRoles
+WHERE ranks <= 10;
 
-
-
-
-### Year 2020                                                
+```
+**Output:**
+### Year 2020
 
 | Job Title                 | Job Count |
 |---------------------------|-----------|
-| Data Scientist            | 21        |
+| Data Scientist            | 22        |
 | Data Engineer             | 13        |
-| Data Analyst              | 6         |
-| Machine Learning Engineer| 4         |
-| Business Data Analyst    | 3         |
+| Data Analyst              | 8         |
+| Machine Learning Engineer | 5         |
+| Business Data Analyst     | 3         |
 | Big Data Engineer         | 3         |
-| Staff Data Analyst        | 2         |
 | Research Scientist        | 2         |
 | Lead Data Scientist       | 2         |
 | Lead Data Engineer        | 2         |
+| Azure Data Engineer       | 1         |
 
+### Year 2021
 
+| Job Title                 | Job Count |
+|---------------------------|-----------|
+| Data Scientist            | 41        |
+| Data Engineer             | 37        |
+| Machine Learning Engineer | 25        |
+| Data Analyst              | 20        |
+| Data Science Manager      | 12        |
+| Research Scientist        | 10        |
+| Principal Data Scientist  | 5         |
+| Director of Data Science  | 5         |
+| Data Science Consultant   | 5         |
+| Big Data Engineer         | 4         |
 
 ### Year 2022
 
@@ -233,42 +211,114 @@ Data Analytics Engineer, Cloud Data Architect, Lead Data Engineer, and Principal
 |---------------------------|-----------|
 | Data Engineer             | 488       |
 | Data Scientist            | 404       |
-| Data Analyst              | 272       |
-| Machine Learning Engineer| 108       |
+| Data Analyst              | 273       |
+| Machine Learning Engineer | 125       |
 | Analytics Engineer        | 56        |
+| Data Science Manager      | 47        |
 | Data Architect            | 46        |
-| Data Science Manager      | 30        |
 | Applied Scientist         | 18        |
 | Research Scientist        | 15        |
-| ML Engineer               | 15        |
+| Machine Learning Scientist| 14        |
 
 ### Year 2023
 
 | Job Title                 | Job Count |
 |---------------------------|-----------|
 | Data Engineer             | 1852      |
-| Data Scientist            | 1711      |
-| Data Analyst              | 1266      |
-| Machine Learning Engineer| 966       |
+| Data Scientist            | 1759      |
+| Data Analyst              | 1268      |
+| Machine Learning Engineer | 1083      |
 | Research Scientist        | 286       |
 | Applied Scientist         | 280       |
+| Data Science Manager      | 254       |
 | Analytics Engineer        | 222       |
 | Data Architect            | 200       |
 | Research Engineer         | 164       |
-| Business Intelligence Engineer| 164   |
 
 ### Year 2024
 
 | Job Title                 | Job Count |
 |---------------------------|-----------|
-| Data Scientist            | 792       |
+| Data Scientist            | 951       |
 | Data Engineer             | 725       |
-| Data Analyst              | 587       |
-| Machine Learning Engineer| 412       |
+| Data Analyst              | 592       |
+| Machine Learning Engineer | 454       |
 | Research Scientist        | 154       |
-| Data Science              | 153       |
 | Analytics Engineer        | 119       |
 | Data Architect            | 106       |
 | Research Engineer         | 100       |
 | Applied Scientist         | 75        |
+| Data Science Manager      | 72        |
+
+The trend analysis shows that the Top 10 popular job titles continue to dominate the data science and analytics landscape, reflecting their essential contributions to organizations in various industries.
+Data Scientist: The demand for Data Scientists has been consistently high throughout the years, showing a steady increase from 2020 to 2023, with a slight decrease in 2024.
+- Data Engineer: Data Engineer positions have also maintained a high demand, particularly in 2023, with a slight decrease in 2024 compared to the previous year.
+- Data Analyst: The demand for Data Analysts has remained relatively stable over the years, showing a slight increase from 2020 to 2021 and then maintaining a similar level in subsequent years.
+- Machine Learning Engineer: The demand for Machine Learning Engineers has seen fluctuations, with a peak in 2023 followed by a slight decrease in 2024.
+- Other Roles: Other roles such as Research Scientist, Analytics Engineer, and Applied Scientist have shown varying levels of demand across the years, with some experiencing peaks in specific years.
+
+*Note: 2024 has just three months( Jan to Mar).*
+
+Overall, the trend suggests a growing demand for data-related roles, particularly for Data Scientists and Data Engineers, indicating the importance of data-driven decision-making in various industries. However, fluctuations in demand across different roles also reflect the evolving nature of the field and the changing requirements of organizations over time.
+
+**4. Which job titles tend to command higher salaries within the data field?**
+
+```SQL
+SELECT 
+    job_title, 
+    ROUND(AVG(salary_in_usd), 0) AS avg_salary,
+    MIN(salary_in_usd) AS min_salary,
+    MAX(salary_in_usd) AS max_salary
+FROM
+    salaries
+GROUP BY job_title
+ORDER BY avg_salary DESC
+LIMIT 10;
+
+```
+
+**Output:**
+| Job Title                      | Avg Salary | Min Salary | Max Salary |
+|--------------------------------|------------|------------|------------|
+| Analytics Engineering Manager | $399,880   | $399,880   | $399,880   |
+| Head of Machine Learning      | $299,758   | $76,309    | $448,000   |
+| Managing Director Data Science| $280,000   | $260,000   | $300,000   |
+| AWS Data Architect            | $258,000   | $258,000   | $258,000   |
+| AI Architect                  | $255,142   | $99,750    | $800,000   |
+| Cloud Data Architect          | $250,000   | $250,000   | $250,000   |
+| Director of Data Science      | $218,775   | $57,786    | $375,500   |
+| Data Infrastructure Engineer  | $207,333   | $135,920   | $385,000   |
+| Prompt Engineer               | $206,075   | $60,462    | $600,000   |
+| Data Analytics Lead           | $198,242   | $17,511    | $405,000   |
+
+**5. Are there factors Contributing to Salary Disparities amongst job titles?**
+
+```sql
+-- Based on experience level
+SELECT job_title, 
+       experience_level,
+       ROUND(AVG(salary_in_usd),1) AS avg_salary
+FROM salaries
+GROUP BY job_title, experience_level
+ORDER BY job_title ASC;
+
+-- Based on employment type
+SELECT job_title, 
+       employment_type,
+       ROUND(AVG(salary_in_usd),1) AS avg_salary
+FROM salaries
+GROUP BY job_title, employment_type
+ORDER BY job_title ASC;
+
+-- Based on company size
+SELECT job_title, 
+       company_size,
+       ROUND(AVG(salary_in_usd),1) AS avg_salary
+FROM salaries
+GROUP BY job_title, company_size
+ORDER BY job_title ASC;
+```
+
+
+
 
