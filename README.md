@@ -328,8 +328,9 @@ ORDER BY job_title ASC;
 
 ```sql
 -- TOP 10
-SELECT country, CONCAT('$', FORMAT(avg_salary, 0)) AS avrg_salary FROM
-(SELECT  c.country, AVG(s.salary_in_usd) AS avg_salary
+SELECT country, CONCAT('$', FORMAT(avg_salary, 0)) AS avrg_salary, employee_count 
+FROM
+(SELECT  c.country, AVG(s.salary_in_usd) AS avg_salary, COUNT(*) AS employee_count
 FROM salaries s
 INNER JOIN countries c
 ON s.company_location = c.code
@@ -338,8 +339,9 @@ ORDER BY avg_salary DESC
 LIMIT 10) AS Top;
 
 -- BOTTOM 10
-SELECT country, CONCAT('$', FORMAT(avg_salary, 0)) AS avrg_salary FROM
-(SELECT  c.country, AVG(s.salary_in_usd) AS avg_salary
+SELECT country, CONCAT('$', FORMAT(avg_salary, 0)) AS avrg_salary, employee_count
+ FROM
+(SELECT  c.country, AVG(s.salary_in_usd) AS avg_salary, COUNT(*) AS employee_count
 FROM salaries s
 INNER JOIN countries c
 ON s.company_location = c.code
@@ -349,33 +351,34 @@ LIMIT 10) AS Bottom;
 
 ```
 **Output: Top 10**
-| Country                  | Avg_Salary    |
-|--------------------------|---------------|
-| Qatar                    | $300,000      |
-| Israel                   | $217,332      |
-| Puerto Rico              | $167,500      |
-| United States of America | $157,449      |
-| New Zealand              | $147,682      |
-| Canada                   | $145,845      |
-| Egypt                    | $140,869      |
-| Saudi Arabia             | $139,999      |
-| Australia                | $131,205      |
-| Mexico                   | $129,241      |
-
+| Country                | Average Salary | Employee Count |
+|------------------------|----------------|----------------|
+| Qatar                  | $300,000.00    | 1              |
+| Israel                 | $217,332.00    | 3              |
+| Puerto Rico            | $167,500.00    | 4              |
+| United States of America | $157,449.00  | 12688          |
+| New Zealand            | $147,682.00    | 6              |
+| Canada                 | $145,845.00    | 380            |
+| Egypt                  | $140,869.00    | 13             |
+| Saudi Arabia           | $139,999.00    | 3              |
+| Australia              | $131,205.00    | 51             |
+| Mexico                 | $129,241.00    | 15             |
 
 **Output: Bottom 10**
-| Country        | Avg_Salary   |
-|----------------|--------------|
-| Ecuador        | $16,000.00   |
-| Moldova        | $18,000.00   |
-| Honduras       | $20,000.00   |
-| Thailand       | $22,971.00   |
-| Turkey         | $23,095.00   |
-| Ghana          | $27,000.00   |
-| Pakistan       | $30,000.00   |
-| American Samoa | $31,684.00   |
-| Indonesia      | $34,208.00   |
-| Hungary        | $39,938.00   |
+| Country          | Average Salary | Employee Count |
+|------------------|----------------|----------------|
+| Ecuador          | $16,000.00     | 1              |
+| Moldova          | $18,000.00     | 1              |
+| Honduras         | $20,000.00     | 1              |
+| Thailand         | $22,971.00     | 3              |
+| Turkey           | $23,095.00     | 6              |
+| Ghana            | $27,000.00     | 3              |
+| Pakistan         | $30,000.00     | 2              |
+| American Samoa   | $31,684.00     | 3              |
+| Indonesia        | $34,208.00     | 2              |
+| Hungary          | $39,938.00     | 4              |
+
+The analysis of average salaries across different countries is subject to a limitation stemming from the disparity in employee counts. Countries with a smaller number of respondents in the dataset may exhibit skewed average salary figures, as these values can be disproportionately influenced by just a few individuals. This situation introduces a potential bias, as the reported averages may not accurately reflect the broader income trends for the entire workforce in those countries.
 
 **7. Salary ranges for entry level positions**
 
@@ -409,10 +412,34 @@ SELECT
 FROM 
     entry
 GROUP BY 
-    job_title;
+    job_title
+ORDER BY avg_salary DESC;
 ```
+**Output:**
+| Job Title                     | Min Salary | Max Salary | Average Salary |
+|------------------------------|------------|------------|----------------|
+| Research Scientist           | $42,000    | $254,270   | $161,642       |
+| Applied Scientist            | $30,000    | $281,700   | $153,443       |
+| Cloud Data Engineer          | $100,000   | $177,177   | $138,589       |
+| Deep Learning Engineer       | $120,000   | $150,000   | $135,000       |
+| Research Engineer            | $16,455    | $350,000   | $131,854       |
+| Data Integration Engineer    | $115,000   | $135,000   | $125,000       |
+| Business Intelligence        | $70,000    | $166,000   | $124,250       |
+| ---------------------------- |------------| -----------| ---------------|
+| Computer Vision Software Engineer | $19,073    | $150,000   | $79,691        |
+| Financial Data Analyst       | $56,500    | $100,000   | $78,250        |
+| Machine Learning Developer   | $15,000    | $180,000   | $73,600        |
+| Data Specialist              | $41,750    | $105,000   | $70,350        |
+| ---------------------------- |------------| -----------| ---------------|
+| Data DevOps Engineer         | $47,918    | $47,918    | $47,918        |
+| Insight Analyst              | $40,000    | $50,000    | $45,000        |
+| Compliance Data Analyst      | $30,000    | $60,000    | $45,000        |
+| Applied Machine Learning Scientist | $30,469   | $48,644    | $40,767        |
+| Finance Data Analyst         | $40,000    | $40,000    | $40,000        |
+| AI Engineer                  | $21,593    | $44,444    | $33,679        |
+| AI Research Engineer         | $24,322    | $36,940    | ...
 
-**8. Average salaries for entry level positions by country**
+**8. Top 10 countries with the highest average entry-level salaries**
 
 ```sql
 SELECT 
@@ -426,13 +453,27 @@ ORDER BY
     avg_entry_salary DESC
     LIMIT 10;
 ```
+**Output:**
+| Country          | Avg Entry Salary |
+|------------------|------------------|
+| Canada           | 88,701           |
+| Switzerland      | 76,880           |
+| Australia        | 73,206           |
+| Lebanon          | 71,750           |
+| Belgium          | 68,031           |
+| Singapore        | 66,970           |
+| Malta            | 61,450           |
+| Germany          | 59,463           |
+| Luxembourg       | 59,102           |
+| United Kingdom   | 55,671           |
+
 
 **9. what is the average pay for entry level data analysts in UK, Nigeria, Australia, US and Canada?**
 
 ```sql
-SELECT 
-    FORMAT(AVG(salary_in_usd), 1) AS avg_salary,
-    country
+SELECT
+Country,
+    FORMAT(AVG(salary_in_usd), 1) AS avg_salary
 FROM
     entry
 WHERE
@@ -443,15 +484,23 @@ WHERE
         AND job_title = 'data analyst' 
 GROUP BY job_title , country
 ORDER BY avg_salary DESC;
-
 ```
+**Output:**
+| Country                 | Avg Salary |
+|-------------------------|------------|
+| United States of America| 90,502     |
+| Canada                  | 56,329     |
+| United Kingdom          | 52,471     |
+| Australia               | 43,765     |
 
-**10. Are there specific countries where entry level jobs tend to earn higher than average?**
+Among these four countries of interest, the US pay entry-level data employees the most. There was no entry for Nigeria.
+
+**10. Are there specific countries where entry level jobs tend to earn higher than average entry salaries?**
 
 ```SQL
 SELECT 
     country,
-    ROUND(AVG(salary_in_usd), 1) AS avg_entry_salary,
+    FORMAT(AVG(salary_in_usd), 0) AS avg_entry_salary,
     COUNT(job_title) AS employee_count
 FROM
     entry
@@ -459,7 +508,22 @@ GROUP BY country
 HAVING AVG(salary_in_usd) > 91897.8
 ORDER BY avg_entry_salary DESC;
 ```
-**11. what roles are entry_levels most hired for?**
+
+**Output:**
+| Country                 | Avg Entry Salary | Employee Count |
+|-------------------------|------------------|----------------|
+| Mexico                  | 223,775          | 4              |
+| Bosnia and Herzegovina | 120,000          | 1              |
+| Sweden                  | 105,000          | 2              |
+| United States of America| 102,929          | 849            |
+| Mauritius               | 100,000          | 1              |
+| Iran                    | 100,000          | 1              |
+| Algeria                 | 100,000          | 1              |
+| Iraq                    | 100,000          | 1              |
+| China                   | 100,000          | 1              |
+
+
+**11. Top 10 roles entry_levels are mostly hired for?**
 
 ```SQL
 SELECT 
@@ -467,8 +531,23 @@ SELECT
 FROM
     entry
 GROUP BY job_title
-ORDER BY employee_count DESC;
+ORDER BY employee_count DESC
+LIMIT 10;
 ```
+**Output:**
+| job_title                  | employee_count |
+|----------------------------|----------------|
+| Data Analyst               | 444            |
+| Data Scientist             | 149            |
+| Data Engineer              | 123            |
+| Research Analyst           | 62             |
+| Machine Learning Engineer  | 57             |
+| Business Intelligence Analyst | 49          |
+| Research Scientist         | 31             |
+| Research Engineer          | 31             |
+| Applied Scientist          | 14             |
+| Analytics Engineer         | 12             |
+
 
 **12. Any growth or decline of entry-level positions over time?**
 ```SQL
@@ -482,6 +561,15 @@ GROUP BY
 ORDER BY 
    entry_level_count DESC;
 ```
+**Output**
+| work_year | entry_level_count |
+|-----------|-------------------|
+| 2024      | 475               |
+| 2023      | 464               |
+| 2022      | 116               |
+| 2021      | 46                |
+| 2020      | 21                |
+The output indicates that the number of entry-level jobs has consistently increased over time, with the highest count observed in 2024 and the lowest in 2020. This shows a growing demand for entry-level roles within the data field, indicating potential opportunities for individuals looking to start their careers in this domain.
 
 **13. And for data analysts?**
 ```SQL
@@ -496,6 +584,15 @@ GROUP BY
 ORDER BY 
    entry_level_count DESC;
 ```
+**Output:**
+| work_year | entry_level_DA |
+|-----------|----------------|
+| 2024      | 255            |
+| 2023      | 161            |
+| 2022      | 17             |
+| 2021      | 6              |
+| 2020      | 5              |
+This implies a growing demand for entry-level Data Analyst roles within the data field, indicating potential opportunities for individuals looking to start their careers as Data Analysts.
 
 **14. Impact of company size and remote work availability on entry-level employment**
 ```SQL
