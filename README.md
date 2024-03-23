@@ -327,14 +327,213 @@ ORDER BY job_title ASC;
 **6. Distribution of average salaries by country**
 
 ```sql
-SELECT ROUND(AVG(s.salary_in_usd),0) AS avg_salary, c.country
+-- TOP 10
+SELECT country, CONCAT('$', FORMAT(avg_salary, 0)) AS avrg_salary FROM
+(SELECT  c.country, AVG(s.salary_in_usd) AS avg_salary
 FROM salaries s
 INNER JOIN countries c
 ON s.company_location = c.code
 GROUP BY c.country
+ORDER BY avg_salary DESC
+LIMIT 10) AS Top;
+
+-- BOTTOM 10
+SELECT country, CONCAT('$', FORMAT(avg_salary, 0)) AS avrg_salary FROM
+(SELECT  c.country, AVG(s.salary_in_usd) AS avg_salary
+FROM salaries s
+INNER JOIN countries c
+ON s.company_location = c.code
+GROUP BY c.country
+ORDER BY avg_salary 
+LIMIT 10) AS Bottom;
+
+```
+**Output: Top 10**
+| Country                  | Avg_Salary    |
+|--------------------------|---------------|
+| Qatar                    | $300,000      |
+| Israel                   | $217,332      |
+| Puerto Rico              | $167,500      |
+| United States of America | $157,449      |
+| New Zealand              | $147,682      |
+| Canada                   | $145,845      |
+| Egypt                    | $140,869      |
+| Saudi Arabia             | $139,999      |
+| Australia                | $131,205      |
+| Mexico                   | $129,241      |
+
+
+**Output: Bottom 10**
+| Country        | Avg_Salary   |
+|----------------|--------------|
+| Ecuador        | $16,000.00   |
+| Moldova        | $18,000.00   |
+| Honduras       | $20,000.00   |
+| Thailand       | $22,971.00   |
+| Turkey         | $23,095.00   |
+| Ghana          | $27,000.00   |
+| Pakistan       | $30,000.00   |
+| American Samoa | $31,684.00   |
+| Indonesia      | $34,208.00   |
+| Hungary        | $39,938.00   |
+
+**7. Salary ranges for entry level positions**
+
+```sql
+-- This view filters data from the salaries table to include only entry-level positions and joins it with the countries table to include the country information.
+-- It selects relevant columns such as work_year, employment_type, job_title, salary_in_usd, remote_status, company_size, and country for analysis.
+-- The view provides a subset of data focusing on entry-level positions, suitable for further analysis.
+
+CREATE VIEW entry AS
+    SELECT 
+        s.work_year,
+        s.employment_type,
+        s.job_title,
+        s.salary_in_usd,
+        s.remote_status,
+        s.company_size,
+        c.country
+    FROM
+        salaries s
+            INNER JOIN
+        countries c ON s.company_location = c.code
+    WHERE
+        s.experience_level = 'Entry-level';
+        
+-- Salary ranges for entry level positions
+SELECT 
+    job_title,
+    MIN(salary_in_usd) AS min_salary,
+    MAX(salary_in_usd) AS max_salary,
+    ROUND(AVG(salary_in_usd),0) AS avg_salary
+FROM 
+    entry
+GROUP BY 
+    job_title;
+```
+
+**8. Average salaries for entry level positions by country**
+
+```sql
+SELECT 
+    country,
+    FORMAT(AVG(salary_in_usd),0) AS avg_entry_salary
+FROM 
+    entry
+GROUP BY 
+    country
+ORDER BY 
+    avg_entry_salary DESC
+    LIMIT 10;
+```
+
+**9. what is the average pay for entry level data analysts in UK, Nigeria, Australia, US and Canada?**
+
+```sql
+SELECT 
+    FORMAT(AVG(salary_in_usd), 1) AS avg_salary,
+    country
+FROM
+    entry
+WHERE
+    country IN ('United kingdom' , 'Nigeria',
+        'United states of America',
+        'Canada',
+        'Australia')
+        AND job_title = 'data analyst' 
+GROUP BY job_title , country
+ORDER BY avg_salary DESC;
+
+```
+
+**10. Are there specific countries where entry level jobs tend to earn higher than average?**
+
+```SQL
+SELECT 
+    country,
+    ROUND(AVG(salary_in_usd), 1) AS avg_entry_salary,
+    COUNT(job_title) AS employee_count
+FROM
+    entry
+GROUP BY country
+HAVING AVG(salary_in_usd) > 91897.8
+ORDER BY avg_entry_salary DESC;
+```
+**11. what roles are entry_levels most hired for?**
+
+```SQL
+SELECT 
+    job_title, COUNT(job_title) AS employee_count
+FROM
+    entry
+GROUP BY job_title
+ORDER BY employee_count DESC;
+```
+
+**12. Any growth or decline of entry-level positions over time?**
+```SQL
+SELECT 
+    work_year,
+    COUNT(*) AS entry_level_count
+FROM 
+    entry
+GROUP BY 
+    work_year
+ORDER BY 
+   entry_level_count DESC;
+```
+
+**13. And for data analysts?**
+```SQL
+SELECT 
+    work_year, job_title,
+    COUNT(*) AS entry_level_count
+FROM 
+    entry
+    WHERE job_title = 'data analyst'
+GROUP BY 
+    work_year
+ORDER BY 
+   entry_level_count DESC;
+```
+
+**14. Impact of company size and remote work availability on entry-level employment**
+```SQL
+SELECT 
+    company_size,remote_status, 
+    AVG(salary_in_usd) AS avg_salary,
+    COUNT(*) AS entry_level_count
+FROM 
+    entry
+GROUP BY 
+    company_size, remote_status
+ORDER BY 
+    company_size, avg_salary DESC;
+```
+
+**15. How much are fully remote entry level employees paid by country?**
+```SQL
+SELECT country, ROUND(avg(salary_in_usd),0) AS avg_salary
+from entry
+where remote_status LIKE '%remote'   
+GROUP BY country
 ORDER BY avg_salary DESC;
 ```
 
+**16. The average salary for different experience levels across different years to analyze year-over-year (YoY) salary growth.**
+```SQL
+SELECT 
+    work_year,
+    experience_level,
+    FORMAT(AVG(salary_in_usd),0) AS avg_salary
+FROM 
+    salaries
+GROUP BY 
+    work_year, experience_level
+ORDER BY 
+    experience_level DESC, work_year;
+
+```
 
 
 
